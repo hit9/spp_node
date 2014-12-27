@@ -1,6 +1,9 @@
 #include "spp.h"
 
 
+/**
+ * New a spp parser.
+ */
 spp_t *
 spp_new()
 {
@@ -15,6 +18,9 @@ spp_new()
 }
 
 
+/**
+ * Feed a spp parser with data.
+ */
 int
 spp_feed(spp_t *spp, char *buf, size_t len)
 {
@@ -30,6 +36,9 @@ spp_feed(spp_t *spp, char *buf, size_t len)
 }
 
 
+/**
+ * Free a spp parser and its data.
+ */
 int
 spp_free(spp_t *spp)
 {
@@ -39,6 +48,9 @@ spp_free(spp_t *spp)
 }
 
 
+/**
+ * Slice spp parser start at somewhere (not an api).
+ */
 int
 spp_buf_slice(spp_t *spp, char * start)
 {
@@ -56,8 +68,11 @@ spp_buf_slice(spp_t *spp, char * start)
 }
 
 
+/**
+ * Parse data.
+ */
 int
-spp_get(spp_t *spp)
+spp_parse(spp_t *spp)
 {
     int id = 0;
     size_t len = spp->bsz;

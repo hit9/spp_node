@@ -23,5 +23,4 @@ private:
 
     spp_t* parser;
 };
-
 };

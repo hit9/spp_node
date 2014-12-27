@@ -24,9 +24,12 @@ Parser::~Parser() {
     spp_free(parser);
 }
 
+
+/**
+ * Register prototypes and exports
+ */
 void Parser::Initialize(Handle<Object> exports) {
     NanScope();
-    // Register prototype for Parser
     Local<FunctionTemplate> t = NanNew<FunctionTemplate>(New);
     t->InstanceTemplate()->SetInternalFieldCount(1);
     NODE_SET_PROTOTYPE_METHOD(t, "feed", Feed);
@@ -34,6 +37,10 @@ void Parser::Initialize(Handle<Object> exports) {
     exports->Set(NanNew<String>("Parser"), t->GetFunction());
 }
 
+
+/**
+ * Public API - new Parser
+ */
 NAN_METHOD(Parser::New) {
     NanScope();
     Parser *parser = new Parser();
@@ -41,6 +48,10 @@ NAN_METHOD(Parser::New) {
     NanReturnValue(args.This());
 }
 
+
+/**
+ * Public API - Parser.prototype.feed
+ */
 NAN_METHOD(Parser::Feed) {
     NanScope();
     Parser *p = ObjectWrap::Unwrap<Parser>(args.This());
@@ -50,6 +61,10 @@ NAN_METHOD(Parser::Feed) {
     NanReturnValue(NanNew<v8::Number>(result));
 }
 
+
+/**
+ * Public API - Parser.prototype.get
+ */
 NAN_METHOD(Parser::Get) {
     NanScope();
     Local<Value> retv;
@@ -57,7 +72,7 @@ NAN_METHOD(Parser::Get) {
     Local<Array> arr(NanNew<Array>());
     NanDisposePersistent(p->handle);
     NanAssignPersistent(p->handle, arr);
-    int result = spp_get(p->parser);
+    int result = spp_parse(p->parser);
 
     if (result == SPP_OK) {
         retv = NanNew<Array>(p->handle);
