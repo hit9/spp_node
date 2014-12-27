@@ -7,7 +7,7 @@
 using namespace spp;
 
 
-static int handler(spp_t *parser, char *str, size_t len, int id) {
+static void handler(spp_t *parser, char *str, size_t len, int id) {
     Parser *p = reinterpret_cast<Parser*>(parser->priv);
     Local<Array> arr = NanNew<Array>(p->handle);
     arr->Set(id, NanNew<String>(str, len));
@@ -17,7 +17,7 @@ Parser::Parser()
 {
     parser = spp_new();
     parser->priv = this;
-    parser->handler = handler;
+    parser->handler = &handler;
 }
 
 Parser::~Parser() {
@@ -62,8 +62,8 @@ NAN_METHOD(Parser::Get) {
     if (result == SPP_OK) {
         retv = NanNew<Array>(p->handle);
         NanDisposePersistent(p->handle);
+        NanReturnValue(retv);
     } else if (result == SPP_EBADFMT) {
         NanReturnUndefined();
     }
-    NanReturnValue(retv);
 }

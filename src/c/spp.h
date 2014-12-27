@@ -36,6 +36,7 @@
 extern "C" {
 #endif
 
+
 typedef enum {
     SPP_OK = 0,
     SPP_ENOMEM = -1,
@@ -47,7 +48,7 @@ typedef struct spp_st {
     char *buf;
     size_t bsz;
     void *priv;
-    int (*handler)(struct spp_st*, char *, size_t, int);
+    void (*handler)(struct spp_st*, char *, size_t, int);
 } spp_t;
 
 
