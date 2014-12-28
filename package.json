@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "dependencies": {
     "bindings": "*",
-    "nan": "~1.1.0"
+    "nan": "~1.1.2"
   },
   "repository": {
     "type": "git",
