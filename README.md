@@ -1,7 +1,7 @@
 Simple Protocol Parser
 ======================
 
-*Actually, this is [ssdb](ssdb.io)'s network protocol, and I think it can
+*Actually, this is [ssdb](http://ssdb.io)'s network protocol, and I think it can
 be used on other projects.*
 
 Protocol
