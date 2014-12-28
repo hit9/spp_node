@@ -50,6 +50,7 @@ spp_t* spp_new();
 int spp_feed(spp_t *, char *, size_t);
 int spp_free(spp_t *);
 int spp_parse(spp_t *);
+int spp_clear(spp_t *);
 
 #ifdef __cplusplus
 }

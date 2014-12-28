@@ -42,8 +42,23 @@ spp_feed(spp_t *spp, char *buf, size_t len)
 int
 spp_free(spp_t *spp)
 {
-    free(spp->buf);
+    if (spp->buf != NULL)
+        free(spp->buf);
     free(spp);
+    return SPP_OK;
+}
+
+
+/**
+ * Clear s spp parser (its buf)
+ */
+int
+spp_clear(spp_t *spp)
+{
+    if (spp->buf != NULL)
+        free(spp->buf);
+    spp->buf = NULL;
+    spp->bsz = 0;
     return SPP_OK;
 }
 
