@@ -5,7 +5,7 @@ build
 test-*
 *.out
 *.dSYM
-src/spp/main.c
-src/spp/spp_test
-src/spp/test.log
+src/c/main.c
+src/c/spp_test
+src/c/test.log
 *.o
