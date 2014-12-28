@@ -54,3 +54,8 @@ while((res = parser.get()) !== undefined) {
   ..
 }
 ```
+
+License
+-------
+
+MIT (c) 2014, hit9 (Chao Wang).
