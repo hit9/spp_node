@@ -54,7 +54,7 @@ spp_free(spp_t *spp)
 int
 spp_buf_slice(spp_t *spp, char * start)
 {
-    size_t dis = spp->buf - start;
+    size_t dis = start - spp->buf;
     size_t new_bsz = spp->bsz - dis;
     char *new_buf = malloc(sizeof(char) * new_bsz);
 
