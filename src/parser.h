@@ -17,6 +17,7 @@ public:
     static NAN_METHOD(New);
     static NAN_METHOD(Feed);
     static NAN_METHOD(Get);
+    static NAN_METHOD(Clear);
 
     Persistent<Array> handle;
 private:

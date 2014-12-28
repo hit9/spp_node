@@ -1,6 +1,5 @@
 #include <v8.h>
 #include <node.h>
-#include <assert.h>
 #include <string.h>
 #include "parser.h"
 
@@ -34,6 +33,7 @@ void Parser::Initialize(Handle<Object> exports) {
     t->InstanceTemplate()->SetInternalFieldCount(1);
     NODE_SET_PROTOTYPE_METHOD(t, "feed", Feed);
     NODE_SET_PROTOTYPE_METHOD(t, "get", Get);
+    NODE_SET_PROTOTYPE_METHOD(t, "clear", Clear);
     exports->Set(NanNew<String>("Parser"), t->GetFunction());
 }
 
@@ -82,4 +82,14 @@ NAN_METHOD(Parser::Get) {
         NanReturnUndefined();
     }
     NanReturnUndefined();
+}
+
+
+/**
+ * Public API - Parser.prototype.clear
+ */
+NAN_METHOD(Parser::Clear) {
+    NanScope();
+    Parser *p = ObjectWrap::Unwrap<Parser>(args.This());
+    NanReturnValue(NanNew<v8::Number>(spp_clear(p->parser)));
 }
