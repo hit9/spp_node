@@ -33,7 +33,6 @@ Install
 npm install spp
 ```
 
-
 Usage
 -----
 
@@ -51,8 +50,26 @@ parser.feed('2\nok\n\n');
 
 var res;
 while((res = parser.get()) !== undefined) {
-  ..
+  console.log(res); // ['ok']
 }
+```
+
+API Ref
+-------
+
+- parser.feed(buffer/string)
+- parser.get()
+- parser.clear()
+
+Benchmark
+---------
+
+Simple Benchmark Result shows that: **SPP is 10 times faster than nodejs implementation**
+
+```
+$ node bench.js
+spp parser:     116279 ops
+nodejs parser:  9920 ops
 ```
 
 License
