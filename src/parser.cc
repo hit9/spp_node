@@ -81,4 +81,5 @@ NAN_METHOD(Parser::Get) {
     } else if (result == SPP_EBADFMT) {
         NanReturnUndefined();
     }
+    NanReturnUndefined();
 }
