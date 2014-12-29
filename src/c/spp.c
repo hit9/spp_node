@@ -1,4 +1,3 @@
-#include <stdint.h>
 #include "spp.h"
 
 
@@ -26,6 +25,10 @@ int
 spp_feed(spp_t *spp, char *data, size_t size)
 {
     size_t new_size = size + spp->size;
+
+    if (new_size > SPP_MAX_SIZE)
+        return SPP_EEXCMAXSIZE;
+
     char *new_data = realloc(spp->data, sizeof(char) * new_size);
 
     if (new_data == NULL) return SPP_ENOMEM;
@@ -120,7 +123,7 @@ spp_parse(spp_t *spp)
 
         int sz = atoi(size_str);
 
-        if (sz < 0 || sz > SIZE_MAX) {
+        if (sz < 0) {
             return SPP_EBADFMT;
         }
 

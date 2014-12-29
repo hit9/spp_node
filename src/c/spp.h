@@ -25,12 +25,15 @@
 extern "C" {
 #endif
 
+#define SPP_MAX_SIZE 1 * 1024 * 1024  // 1mb
+
 
 typedef enum {
     SPP_OK = 0,
     SPP_ENOMEM = -1,
-    SPP_EBADFMT = -2,
-    SPP_EUNFINISH = -3,
+    SPP_EEXCMAXSIZE = -2,
+    SPP_EBADFMT = -3,
+    SPP_EUNFINISH = -4,
 } spp_st_t;
 
 
