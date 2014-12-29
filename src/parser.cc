@@ -59,10 +59,10 @@ NAN_METHOD(Parser::Feed) {
     if (args.Length() != 1) {
         NanThrowTypeError("Feed need one argument");
     } else {
-        v8::String::Utf8Value str(args[0]->ToString());
+        String::Utf8Value str(args[0]->ToString());
         char *data = *str;
         int result = spp_feed(p->parser, data, strlen(data));
-        NanReturnValue(NanNew<v8::Number>(result));
+        NanReturnValue(NanNew<Number>(result));
     }
 }
 
@@ -101,5 +101,5 @@ NAN_METHOD(Parser::Get) {
 NAN_METHOD(Parser::Clear) {
     NanScope();
     Parser *p = ObjectWrap::Unwrap<Parser>(args.This());
-    NanReturnValue(NanNew<v8::Number>(spp_clear(p->parser)));
+    NanReturnValue(NanNew<Number>(spp_clear(p->parser)));
 }
