@@ -91,9 +91,8 @@ spp_parse(spp_t *spp)
 {
     char *ptr = spp->data;
     char *end = spp->data + spp->size;
-    long int id = 0;
+    long id = 0;
     size_t len = spp->size;
-    size_t size = spp->size;
 
     while(len > 0) {
         char *ch = (char *)memchr(ptr, '\n', len);
@@ -111,9 +110,17 @@ spp_parse(spp_t *spp)
             return SPP_EBADFMT;
         }
 
-        size_t sz = (size_t)strtol(ptr, NULL, 10);
+        char size_str[20] = {0};
 
-        if (sz > SIZE_MAX) {
+        if (dis > (int)sizeof(size_str) - 1) {
+            return SPP_EBADFMT;
+        }
+
+        memcpy(size_str, ptr, dis - 1); // no '\n'
+
+        int sz = atoi(size_str);
+
+        if (sz < 0 || sz > SIZE_MAX) {
             return SPP_EBADFMT;
         }
 

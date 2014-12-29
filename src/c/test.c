@@ -35,11 +35,11 @@ int main(int argc, const char *argv[])
     assign_persistent_suite(0, "ok");
     assign_persistent_suite(1, "body");
     assert(spp_parse(spp) == SPP_OK);
-    assert(spp_parse(spp) == SPP_EBADFMT);
+    assert(spp_parse(spp) == SPP_EUNFINISH);
     PASS();
 
     CASE("spp_parse (bad format suite)");
-    char *s2 = "2\nbadformat\r\n";
+    char *s2 = "a\nbadformat\r\n";
     assert(spp_feed(spp, s2, strlen(s2)) == SPP_OK);
     assert(spp_parse(spp) == SPP_EBADFMT);
     PASS();
@@ -54,7 +54,7 @@ int main(int argc, const char *argv[])
     assign_persistent_suite(0, "ok");
     assign_persistent_suite(1, "body");
     assert(spp_feed(spp, s3, strlen(s3)) == SPP_OK);
-    assert(spp_parse(spp) == SPP_EBADFMT);
+    assert(spp_parse(spp) == SPP_EUNFINISH);
     assert(spp_feed(spp, s4, strlen(s4)) == SPP_OK);
     assert(spp_parse(spp) == SPP_OK);
 
