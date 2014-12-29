@@ -56,8 +56,8 @@ NAN_METHOD(Parser::Feed) {
     NanScope();
     Parser *p = ObjectWrap::Unwrap<Parser>(args.This());
     v8::String::Utf8Value str(args[0]->ToString());
-    char *buf = *str;
-    int result = spp_feed(p->parser, buf, strlen(buf));
+    char *data = *str;
+    int result = spp_feed(p->parser, data, strlen(data));
     NanReturnValue(NanNew<v8::Number>(result));
 }
 

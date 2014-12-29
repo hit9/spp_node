@@ -22,7 +22,6 @@ function randomString(length) {
 }
 
 
-var s = randomString(65535 * 100);
-parser.feed(new Buffer(util.format('%d\n%s\n\n', s.length, s)));
-
-console.log(parser.get());
+var s = randomString(65539);
+parser.feed(new Buffer(util.format('%d\n3%s\n\n', s.length, s)));
+parser.get();

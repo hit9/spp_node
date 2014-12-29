@@ -10,8 +10,8 @@ spp_new()
     spp_t *spp = malloc(sizeof(spp_t));
     if (spp == NULL)
         return NULL;
-    spp->buf = NULL;
-    spp->bsz = 0;
+    spp->data = NULL;
+    spp->size = 0;
     spp->priv = NULL;
     spp->handler = NULL;
     return spp;
@@ -22,16 +22,16 @@ spp_new()
  * Feed a spp parser with data.
  */
 int
-spp_feed(spp_t *spp, char *buf, size_t len)
+spp_feed(spp_t *spp, char *data, size_t size)
 {
-    size_t new_bsz = len + spp->bsz;
-    char *new_buf = realloc(spp->buf, sizeof(char) * new_bsz);
+    size_t new_size = size + spp->size;
+    char *new_data = realloc(spp->data, sizeof(char) * new_size);
 
-    if (new_buf == NULL) return SPP_ENOMEM;
+    if (new_data == NULL) return SPP_ENOMEM;
 
-    spp->buf = new_buf;
-    memcpy(spp->buf + spp->bsz, buf, len);
-    spp->bsz = new_bsz;
+    spp->data = new_data;
+    memcpy(spp->data + spp->size, data, size);
+    spp->size = new_size;
     return SPP_OK;
 }
 
@@ -42,8 +42,7 @@ spp_feed(spp_t *spp, char *buf, size_t len)
 int
 spp_free(spp_t *spp)
 {
-    if (spp->buf != NULL)
-        free(spp->buf);
+    spp_clear(spp);
     free(spp);
     return SPP_OK;
 }
@@ -55,10 +54,10 @@ spp_free(spp_t *spp)
 int
 spp_clear(spp_t *spp)
 {
-    if (spp->buf != NULL)
-        free(spp->buf);
-    spp->buf = NULL;
-    spp->bsz = 0;
+    if (spp->data != NULL)
+        free(spp->data);
+    spp->data = NULL;
+    spp->size = 0;
     return SPP_OK;
 }
 
@@ -69,16 +68,16 @@ spp_clear(spp_t *spp)
 int
 spp_buf_slice(spp_t *spp, char * start)
 {
-    size_t dis = start - spp->buf;
-    size_t new_bsz = spp->bsz - dis;
-    char *new_buf = malloc(sizeof(char) * new_bsz);
+    size_t dis = start - spp->data;
+    size_t new_size = spp->size - dis;
+    char *new_data = malloc(sizeof(char) * new_size);
 
-    if (new_buf == NULL) return SPP_ENOMEM;
+    if (new_data == NULL) return SPP_ENOMEM;
 
-    memcpy(new_buf, start, new_bsz);
-    free(spp->buf);
-    spp->buf = new_buf;
-    spp->bsz = new_bsz;
+    memcpy(new_data, start, new_size);
+    free(spp->data);
+    spp->data = new_data;
+    spp->size = new_size;
     return SPP_OK;
 }
 
@@ -90,8 +89,8 @@ int
 spp_parse(spp_t *spp)
 {
     int id = 0;
-    size_t len = spp->bsz;
-    char *ptr = spp->buf;
+    size_t len = spp->size;
+    char *ptr = spp->data;
 
     while(len > 0) {
         char *ch = (char *)memchr(ptr, '\n', len);

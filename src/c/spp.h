@@ -34,8 +34,8 @@ typedef enum {
 
 
 typedef struct spp_st {
-    char *buf;  /* feed data */
-    size_t bsz;  /* feed data size */
+    char *data;  /* feed data */
+    size_t size;  /* feed data size */
     void *priv;  /* user-settable arbitrary field */
     /* *
      * required handler, called with 4 arguments: spp itself,
