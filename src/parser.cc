@@ -68,7 +68,18 @@ NAN_METHOD(Parser::Feed) {
         String::Utf8Value str(args[0]->ToString());
         char *data = *str;
         int result = spp_feed(p->parser, data, strlen(data));
-        NanReturnValue(NanNew<Number>(result));
+        switch(result) {
+            case SPP_OK:
+                // return the new size
+                NanReturnValue(NanNew<Number>(p->parser->size));
+                break;
+            case SPP_ENOMEM:
+                NanThrowError("No memory");
+                break;
+            case SPP_EEXCMAXSIZE:
+                NanThrowError("Exceeds max string size limit");
+                break;
+        }
     }
 }
 
