@@ -89,14 +89,22 @@ NAN_METHOD(Parser::Get) {
         NanAssignPersistent(p->handle, arr);
         int result = spp_parse(p->parser);
 
-        if (result == SPP_OK) {
-            retv = NanNew<Array>(p->handle);
-            NanDisposePersistent(p->handle);
-            NanReturnValue(retv);
-        } else if (result == SPP_EBADFMT) {
-            NanReturnUndefined();
+        switch(result) {
+            case SPP_OK:
+                retv = NanNew<Array>(p->handle);
+                NanDisposePersistent(p->handle);
+                NanReturnValue(retv);
+                break;
+            case SPP_ENOMEM:
+                NanThrowError("No memory");
+                break;
+            case SPP_EBADFMT:
+                NanThrowError("Bad format");
+                break;
+            case SPP_EUNFINISH:
+                NanReturnUndefined();
+                break;
         }
-        NanReturnUndefined();
     }
 }
 

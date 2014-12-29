@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "spp.h"
 
 
@@ -88,9 +89,11 @@ spp_buf_slice(spp_t *spp, char * start)
 int
 spp_parse(spp_t *spp)
 {
-    int id = 0;
-    size_t len = spp->size;
     char *ptr = spp->data;
+    char *end = spp->data + spp->size;
+    long int id = 0;
+    size_t len = spp->size;
+    size_t size = spp->size;
 
     while(len > 0) {
         char *ch = (char *)memchr(ptr, '\n', len);
@@ -104,7 +107,15 @@ spp_parse(spp_t *spp)
             return spp_buf_slice(spp, ch);
         }
 
-        int sz = (int)strtol(ptr, NULL, 10);
+        if (ptr[0] < '0' || ptr[0] > '9') {
+            return SPP_EBADFMT;
+        }
+
+        size_t sz = (size_t)strtol(ptr, NULL, 10);
+
+        if (sz > SIZE_MAX) {
+            return SPP_EBADFMT;
+        }
 
         len -= dis + sz;
         ptr += dis + sz;
@@ -121,5 +132,5 @@ spp_parse(spp_t *spp)
 
         (spp->handler)(spp, ch, sz, id++);
     }
-    return SPP_EBADFMT;
+    return SPP_EUNFINISH;
 }
