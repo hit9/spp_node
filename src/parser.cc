@@ -43,9 +43,13 @@ void Parser::Initialize(Handle<Object> exports) {
  */
 NAN_METHOD(Parser::New) {
     NanScope();
-    Parser *parser = new Parser();
-    parser->Wrap(args.This());
-    NanReturnValue(args.This());
+    if (args.Length() != 0) {
+        NanThrowTypeError("Parser need no arguments");
+    } else {
+        Parser *parser = new Parser();
+        parser->Wrap(args.This());
+        NanReturnValue(args.This());
+    }
 }
 
 
