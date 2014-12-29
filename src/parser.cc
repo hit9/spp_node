@@ -44,7 +44,7 @@ void Parser::Initialize(Handle<Object> exports) {
 NAN_METHOD(Parser::New) {
     NanScope();
     if (args.Length() != 0) {
-        NanThrowTypeError("Parser need no arguments");
+        NanThrowTypeError("Parser requires no arguments");
     } else {
         Parser *parser = new Parser();
         parser->Wrap(args.This());
@@ -61,7 +61,9 @@ NAN_METHOD(Parser::Feed) {
     Parser *p = ObjectWrap::Unwrap<Parser>(args.This());
 
     if (args.Length() != 1) {
-        NanThrowTypeError("Feed need one argument");
+        NanThrowTypeError("Feed requires one argument");
+    } else if (!args[0]->IsString() && !Buffer::HasInstance(args[0])) {
+        NanThrowTypeError("Requires string/buffer");
     } else {
         String::Utf8Value str(args[0]->ToString());
         char *data = *str;
@@ -78,7 +80,7 @@ NAN_METHOD(Parser::Get) {
     NanScope();
 
     if (args.Length() != 0) {
-        NanThrowTypeError("Get need no arguments");
+        NanThrowTypeError("Get requires no arguments");
     } else {
         Local<Value> retv;
         Parser *p = ObjectWrap::Unwrap<Parser>(args.This());
