@@ -55,10 +55,15 @@ NAN_METHOD(Parser::New) {
 NAN_METHOD(Parser::Feed) {
     NanScope();
     Parser *p = ObjectWrap::Unwrap<Parser>(args.This());
-    v8::String::Utf8Value str(args[0]->ToString());
-    char *data = *str;
-    int result = spp_feed(p->parser, data, strlen(data));
-    NanReturnValue(NanNew<v8::Number>(result));
+
+    if (args.Length() != 1) {
+        NanThrowTypeError("Feed need one argument");
+    } else {
+        v8::String::Utf8Value str(args[0]->ToString());
+        char *data = *str;
+        int result = spp_feed(p->parser, data, strlen(data));
+        NanReturnValue(NanNew<v8::Number>(result));
+    }
 }
 
 
@@ -67,21 +72,26 @@ NAN_METHOD(Parser::Feed) {
  */
 NAN_METHOD(Parser::Get) {
     NanScope();
-    Local<Value> retv;
-    Parser *p = ObjectWrap::Unwrap<Parser>(args.This());
-    Local<Array> arr(NanNew<Array>());
-    NanDisposePersistent(p->handle);
-    NanAssignPersistent(p->handle, arr);
-    int result = spp_parse(p->parser);
 
-    if (result == SPP_OK) {
-        retv = NanNew<Array>(p->handle);
+    if (args.Length() != 0) {
+        NanThrowTypeError("Get need no arguments");
+    } else {
+        Local<Value> retv;
+        Parser *p = ObjectWrap::Unwrap<Parser>(args.This());
+        Local<Array> arr(NanNew<Array>());
         NanDisposePersistent(p->handle);
-        NanReturnValue(retv);
-    } else if (result == SPP_EBADFMT) {
+        NanAssignPersistent(p->handle, arr);
+        int result = spp_parse(p->parser);
+
+        if (result == SPP_OK) {
+            retv = NanNew<Array>(p->handle);
+            NanDisposePersistent(p->handle);
+            NanReturnValue(retv);
+        } else if (result == SPP_EBADFMT) {
+            NanReturnUndefined();
+        }
         NanReturnUndefined();
     }
-    NanReturnUndefined();
 }
 
 
