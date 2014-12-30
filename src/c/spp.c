@@ -67,10 +67,10 @@ spp_clear(spp_t *spp)
 
 
 /**
- * Slice spp parser start at somewhere (not an api).
+ * Splice spp parser start at somewhere (not an api).
  */
 int
-spp_buf_slice(spp_t *spp, char * start)
+spp_splice(spp_t *spp, char *start)
 {
     size_t dis = start - spp->data;
     size_t new_size = spp->size - dis;
@@ -93,9 +93,8 @@ int
 spp_parse(spp_t *spp)
 {
     char *ptr = spp->data;
-    char *end = spp->data + spp->size;
     long id = 0;
-    size_t len = spp->size;
+    long len = spp->size;
 
     while(len > 0) {
         char *ch = (char *)memchr(ptr, '\n', len);
@@ -106,7 +105,7 @@ spp_parse(spp_t *spp)
         int dis = ch - ptr;
 
         if(dis == 1 || (dis == 2 && ptr[0] == '\r')) {
-            return spp_buf_slice(spp, ch);
+            return spp_splice(spp, ch);
         }
 
         if (ptr[0] < '0' || ptr[0] > '9') {
@@ -127,7 +126,10 @@ spp_parse(spp_t *spp)
             return SPP_EBADFMT;
         }
 
-        len -= dis + sz;
+        len -= (dis + sz);
+
+        if (len < 0) break;
+
         ptr += dis + sz;
 
         if (len >= 1 && ptr[0] == '\n') {
