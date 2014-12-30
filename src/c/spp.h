@@ -25,7 +25,7 @@
 extern "C" {
 #endif
 
-#define SPP_MAX_SIZE 1 * 1024 * 1024  // 1mb
+#define SPP_MAX_SIZE 16 * 1024 * 1024  // 16mb
 
 
 typedef enum {
