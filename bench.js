@@ -61,6 +61,8 @@ NodejsParser.prototype.get = function() {
     len -= dis + sz;
     ptr += dis + sz;
 
+    if (len < 0) break;
+
     if (len >= 1 && this.buf[ptr] === 10) {
       len -= 1;
       ptr += 1;
