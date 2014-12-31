@@ -93,6 +93,7 @@ int
 spp_parse(spp_t *spp)
 {
     char *ptr = spp->data;
+    char *end = spp->data + spp->size;
     long id = 0;
     long len = spp->size;
 
@@ -126,11 +127,10 @@ spp_parse(spp_t *spp)
             return SPP_EBADFMT;
         }
 
-        len -= (dis + sz);
-
-        if (len < 0) break;
-
+        len -= dis + sz;
         ptr += dis + sz;
+
+        if (len < 0 || ptr > end) break;
 
         if (len >= 1 && ptr[0] == '\n') {
             len -= 1;
