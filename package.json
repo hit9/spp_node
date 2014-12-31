@@ -1,7 +1,7 @@
 {
   "name": "spp",
   "description": "My Simple Protocol Parser For Node, Built For Speed.",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "hit9 <hit9@icloud.com>",
   "engines": {
     "node": ">= 0.8.0"
