@@ -1,15 +1,16 @@
 #include <v8.h>
 #include <node.h>
 #include <string.h>
+#include <stdint.h>
 #include "parser.h"
 
 using namespace spp;
 
 
-static void handler(spp_t *parser, char *str, size_t len, int id) {
+static void handler(spp_t *parser, char *data, size_t len, int id) {
     Parser *p = reinterpret_cast<Parser*>(parser->priv);
     Local<Array> arr = NanNew<Array>(p->handle);
-    arr->Set(id, NanNew<String>(str, len));
+    arr->Set(id, NanNew<String>(data, len));
 }
 
 Parser::Parser()
@@ -65,19 +66,16 @@ NAN_METHOD(Parser::Feed) {
     } else if (!args[0]->IsString() && !Buffer::HasInstance(args[0])) {
         NanThrowTypeError("Requires string/buffer");
     } else {
-        String::Utf8Value str(args[0]->ToString());
-        char *data = *str;
-        int result = spp_feed(p->parser, data, strlen(data));
+        String::Utf8Value s(args[0]->ToString());
+        char *str = *s;
+        int result = spp_feed(p->parser, str);
         switch(result) {
             case SPP_OK:
                 // return the new size
-                NanReturnValue(NanNew<Number>(p->parser->size));
+                NanReturnValue(NanNew<Number>(p->parser->buf->size));
                 break;
             case SPP_ENOMEM:
                 NanThrowError("No memory");
-                break;
-            case SPP_EEXCMAXSIZE:
-                NanThrowError("Exceeds max string size limit");
                 break;
         }
     }
@@ -126,5 +124,5 @@ NAN_METHOD(Parser::Get) {
 NAN_METHOD(Parser::Clear) {
     NanScope();
     Parser *p = ObjectWrap::Unwrap<Parser>(args.This());
-    NanReturnValue(NanNew<Number>(spp_clear(p->parser)));
+    spp_clear(p->parser);
 }

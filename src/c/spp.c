@@ -1,5 +1,5 @@
+#include <stdio.h>
 #include "spp.h"
-
 
 /**
  * New a spp parser.
@@ -10,81 +10,48 @@ spp_new()
     spp_t *spp = malloc(sizeof(spp_t));
     if (spp == NULL)
         return NULL;
-    spp->data = NULL;
-    spp->size = 0;
+    spp->buf = buf_new(SPP_BUF_UNIT);
     spp->priv = NULL;
     spp->handler = NULL;
     return spp;
 }
 
+/**
+ * Free a spp parser and its data.
+ */
+void
+spp_free(spp_t *spp)
+{
+    buf_clear(spp->buf);
+
+    if (spp->buf != NULL)
+        buf_free(spp->buf);
+
+    if (spp != NULL)
+        free(spp);
+}
+
+/**
+ * Clear s spp parser (its buf)
+ */
+void
+spp_clear(spp_t *spp)
+{
+    buf_clear(spp->buf);
+}
 
 /**
  * Feed a spp parser with data.
  */
 int
-spp_feed(spp_t *spp, char *data, size_t size)
+spp_feed(spp_t *spp, char *data)
 {
-    size_t new_size = size + spp->size;
+    int res = buf_puts(spp->buf, data);
 
-    if (new_size > SPP_MAX_SIZE)
-        return SPP_EEXCMAXSIZE;
-
-    char *new_data = realloc(spp->data, sizeof(char) * new_size);
-
-    if (new_data == NULL) return SPP_ENOMEM;
-
-    spp->data = new_data;
-    memcpy(spp->data + spp->size, data, size);
-    spp->size = new_size;
+    if (res == BUF_ENOMEM)
+        return SPP_ENOMEM;
     return SPP_OK;
 }
-
-
-/**
- * Free a spp parser and its data.
- */
-int
-spp_free(spp_t *spp)
-{
-    spp_clear(spp);
-    free(spp);
-    return SPP_OK;
-}
-
-
-/**
- * Clear s spp parser (its buf)
- */
-int
-spp_clear(spp_t *spp)
-{
-    if (spp->data != NULL)
-        free(spp->data);
-    spp->data = NULL;
-    spp->size = 0;
-    return SPP_OK;
-}
-
-
-/**
- * Splice spp parser start at somewhere (not an api).
- */
-int
-spp_splice(spp_t *spp, char *start)
-{
-    size_t dis = start - spp->data;
-    size_t new_size = spp->size - dis;
-    char *new_data = malloc(sizeof(char) * new_size);
-
-    if (new_data == NULL) return SPP_ENOMEM;
-
-    memcpy(new_data, start, new_size);
-    free(spp->data);
-    spp->data = new_data;
-    spp->size = new_size;
-    return SPP_OK;
-}
-
 
 /**
  * Parse data.
@@ -92,13 +59,14 @@ spp_splice(spp_t *spp, char *start)
 int
 spp_parse(spp_t *spp)
 {
-    char *ptr = spp->data;
-    char *end = spp->data + spp->size;
+    uint8_t *start = spp->buf->data;
+    uint8_t *end = spp->buf->data + spp->buf->size;
+    uint8_t *ptr = start;
     long id = 0;
-    long len = spp->size;
+    long len = spp->buf->size;
 
     while(len > 0) {
-        char *ch = (char *)memchr(ptr, '\n', len);
+        uint8_t *ch = (uint8_t *)memchr(ptr, '\n', len);
 
         if (ch == NULL) break;
 
@@ -106,14 +74,15 @@ spp_parse(spp_t *spp)
         int dis = ch - ptr;
 
         if(dis == 1 || (dis == 2 && ptr[0] == '\r')) {
-            return spp_splice(spp, ch);
+            buf_lrm(spp->buf, ch - start);
+            return SPP_OK;
         }
 
         if (ptr[0] < '0' || ptr[0] > '9') {
             return SPP_EBADFMT;
         }
 
-        char size_str[20] = {0};
+        uint8_t size_str[20] = {0};
 
         if (dis > (int)sizeof(size_str) - 1) {
             return SPP_EBADFMT;
@@ -121,7 +90,7 @@ spp_parse(spp_t *spp)
 
         memcpy(size_str, ptr, dis - 1); // no '\n'
 
-        int sz = atoi(size_str);
+        int sz = atoi((const char *)size_str);
 
         if (sz < 0) {
             return SPP_EBADFMT;
@@ -142,7 +111,7 @@ spp_parse(spp_t *spp)
             break;
         }
 
-        (spp->handler)(spp, ch, sz, id++);
+        (spp->handler)(spp, (char *)ch, sz, id++);
     }
     return SPP_EUNFINISH;
 }

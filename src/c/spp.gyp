@@ -6,7 +6,7 @@
       'direct_dependent_settings': {
         'include_dirs': [ '.' ],
       },
-      'sources': ['./spp.c'],
+      'sources': ['./spp.c', './buf.c'],
       'conditions': [
         ['OS=="mac"', {
           'xcode_settings': {
