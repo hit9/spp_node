@@ -14,15 +14,15 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include "buf.h"
+#include "hbuf.h"
 
 /**
  * New buf
  */
-buf_t *
-buf_new(size_t unit)
+hbuf_t *
+hbuf_new(size_t unit)
 {
-    buf_t *buf = malloc(sizeof(buf_t));
+    hbuf_t *buf = malloc(sizeof(hbuf_t));
 
     if (buf != NULL) {
         buf->data = NULL;
@@ -38,7 +38,7 @@ buf_new(size_t unit)
  * Free buf
  */
 void
-buf_free(buf_t *buf)
+hbuf_free(hbuf_t *buf)
 {
     if (buf->data != NULL)
         free(buf->data);
@@ -51,8 +51,10 @@ buf_free(buf_t *buf)
  * Free buf data
  */
 void
-buf_clear(buf_t *buf)
+hbuf_clear(hbuf_t *buf)
 {
+    assert(buf != NULL);
+
     if (buf->data != NULL)
         free(buf->data);
     buf->data = NULL;
@@ -64,15 +66,15 @@ buf_clear(buf_t *buf)
  * Increase buf allocated size to `size`
  */
 int
-buf_grow(buf_t *buf, size_t size)
+hbuf_grow(hbuf_t *buf, size_t size)
 {
     assert(buf != NULL && buf->unit != 0);
 
-    if (size > BUF_MAX_SIZE)
-        return BUF_ENOMEM;
+    if (size > HBUF_MAX_SIZE)
+        return HBUF_ENOMEM;
 
     if (size <= buf->cap)
-        return BUF_OK;
+        return HBUF_OK;
 
     size_t cap = buf->cap + buf->unit;
 
@@ -82,18 +84,18 @@ buf_grow(buf_t *buf, size_t size)
     uint8_t *data = realloc(buf->data, cap);
 
     if (data == NULL)
-        return BUF_ENOMEM;
+        return HBUF_ENOMEM;
 
     buf->data = data;
     buf->cap = cap;
-    return BUF_OK;
+    return HBUF_OK;
 }
 
 /**
  * Get data as c string (terminate with '\0')
  */
 char *
-buf_str(buf_t *buf)
+hbuf_str(hbuf_t *buf)
 {
     assert(buf && buf->unit);
 
@@ -101,7 +103,7 @@ buf_str(buf_t *buf)
         return (char *)buf->data;
 
     if (buf->size + 1 <= buf->cap ||
-            buf_grow(buf, buf->size + 1) == BUF_OK) {
+            hbuf_grow(buf, buf->size + 1) == HBUF_OK) {
         buf->data[buf->size] = '\0';
         return (char *)buf->data;
     }
@@ -113,23 +115,23 @@ buf_str(buf_t *buf)
  * Put a char to buf
  */
 int
-buf_putc(buf_t *buf, char ch)
+hbuf_putc(hbuf_t *buf, char ch)
 {
-    int res = buf_grow(buf, buf->size + 1);
+    int res = hbuf_grow(buf, buf->size + 1);
 
-    if (res != BUF_OK)
+    if (res != HBUF_OK)
         return res;
 
     buf->data[buf->size] = ch;
     buf->size += 1;
-    return BUF_OK;
+    return HBUF_OK;
 }
 
 /**
  * Print buf to stdout
  */
 void
-buf_print(buf_t *buf)
+hbuf_print(hbuf_t *buf)
 {
     printf("%.*s\n", (int)buf->size, buf->data);
 }
@@ -138,25 +140,25 @@ buf_print(buf_t *buf)
  * Put data to buf
  */
 int
-buf_put(buf_t *buf, uint8_t *data, size_t size)
+hbuf_put(hbuf_t *buf, uint8_t *data, size_t size)
 {
-    int res = buf_grow(buf, buf->size + size);
+    int result = hbuf_grow(buf, buf->size + size);
 
-    if (res != BUF_OK)
-        return res;
+    if (result == HBUF_OK) {
+        memcpy(buf->data + buf->size, data, size);
+        buf->size += size;
+    }
 
-    memcpy(buf->data + buf->size, data, size);
-    buf->size += size;
-    return BUF_OK;
+    return result;
 }
 
 /**
  * Put string to buf
  */
 int
-buf_puts(buf_t *buf, char *str)
+hbuf_puts(hbuf_t *buf, char *str)
 {
-    return buf_put(buf, (uint8_t *)str, strlen(str));
+    return hbuf_put(buf, (uint8_t *)str, strlen(str));
 }
 
 
@@ -164,7 +166,7 @@ buf_puts(buf_t *buf, char *str)
  * Remove left data from buf by number of bytes
  */
 void
-buf_lrm(buf_t *buf, size_t size)
+hbuf_lrm(hbuf_t *buf, size_t size)
 {
     assert(buf != NULL && buf->unit != 0);
 
@@ -182,7 +184,7 @@ buf_lrm(buf_t *buf, size_t size)
  * Remove right data from buf by number of bytes
  */
 void
-buf_rrm(buf_t *buf, size_t size)
+hbuf_rrm(hbuf_t *buf, size_t size)
 {
     assert(buf != NULL && buf->unit != 0);
 

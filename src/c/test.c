@@ -91,7 +91,7 @@ case_spp_feed()
     char *s2 = "world";
     assert(spp_feed(spp, s1) == SPP_OK);
     assert(spp_feed(spp, s2) == SPP_OK);
-    assert(strcmp(buf_str(spp->buf), "helloworld") == 0);
+    assert(strcmp(hbuf_str(spp->buf), "helloworld") == 0);
     spp_free(spp);
 }
 

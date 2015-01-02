@@ -10,7 +10,7 @@ spp_new()
     spp_t *spp = malloc(sizeof(spp_t));
     if (spp == NULL)
         return NULL;
-    spp->buf = buf_new(SPP_BUF_UNIT);
+    spp->buf = hbuf_new(SPP_HBUF_UNIT);
     spp->priv = NULL;
     spp->handler = NULL;
     return spp;
@@ -22,10 +22,10 @@ spp_new()
 void
 spp_free(spp_t *spp)
 {
-    buf_clear(spp->buf);
+    hbuf_clear(spp->buf);
 
     if (spp->buf != NULL)
-        buf_free(spp->buf);
+        hbuf_free(spp->buf);
 
     if (spp != NULL)
         free(spp);
@@ -37,7 +37,7 @@ spp_free(spp_t *spp)
 void
 spp_clear(spp_t *spp)
 {
-    buf_clear(spp->buf);
+    hbuf_clear(spp->buf);
 }
 
 /**
@@ -46,9 +46,9 @@ spp_clear(spp_t *spp)
 int
 spp_feed(spp_t *spp, char *data)
 {
-    int res = buf_puts(spp->buf, data);
+    int res = hbuf_puts(spp->buf, data);
 
-    if (res == BUF_ENOMEM)
+    if (res == HBUF_ENOMEM)
         return SPP_ENOMEM;
     return SPP_OK;
 }
@@ -74,7 +74,7 @@ spp_parse(spp_t *spp)
         int dis = ch - ptr;
 
         if(dis == 1 || (dis == 2 && ptr[0] == '\r')) {
-            buf_lrm(spp->buf, ch - start);
+            hbuf_lrm(spp->buf, ch - start);
             return SPP_OK;
         }
 
