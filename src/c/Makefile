@@ -2,7 +2,7 @@ NAME = spp_test
 
 INC = ./
 
-SRC = ./test.c ./spp.c ./buf.c
+SRC = ./test.c ./spp.c ./hbuf.c
 
 CC = cc
 

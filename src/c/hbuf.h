@@ -1,5 +1,4 @@
 /**
- *
  * Copyright (c) 2015, Chao Wang (hit9 <hit9@icloud.com>)
  *
  * Permission to use, copy, modify, and distribute this software for any
@@ -16,8 +15,8 @@
  */
 
 
-#ifndef __BUF_H
-#define __BUF_H
+#ifndef __HBUF_H
+#define __HBUF_H
 
 #include <assert.h>
 #include <stdint.h>
@@ -29,32 +28,32 @@
 extern "C" {
 #endif
 
-#define BUF_MAX_SIZE 16 * 1024 * 1024  //16mb
+#define HBUF_MAX_SIZE 16 * 1024 * 1024  //16mb
 
 typedef enum {
-    BUF_OK = 0,
-    BUF_ENOMEM = 1,
-} buf_error_t;
+    HBUF_OK = 0,
+    HBUF_ENOMEM = 1,
+} hbuf_error_t;
 
-typedef struct buf_st {
+typedef struct hbuf_st {
     uint8_t *data;      /* real data */
     size_t size;        /* real data size */
     size_t cap;         /* buf cap */
     size_t unit;        /* reallocation unit size */
-} buf_t;
+} hbuf_t;
 
 
-buf_t *buf_new(size_t);
-void buf_free(buf_t *);
-void buf_clear(buf_t *);
-int buf_grow(buf_t *, size_t);
-char *buf_str(buf_t *);
-void buf_print(buf_t *);
-int buf_put(buf_t *, uint8_t *, size_t);
-int buf_putc(buf_t *, char);
-int buf_puts(buf_t *, char *);
-void buf_lrm(buf_t *, size_t);
-void buf_rrm(buf_t *, size_t);
+hbuf_t *hbuf_new(size_t);
+void hbuf_free(hbuf_t *);
+void hbuf_clear(hbuf_t *);
+int hbuf_grow(hbuf_t *, size_t);
+char *hbuf_str(hbuf_t *);
+void hbuf_print(hbuf_t *);
+int hbuf_put(hbuf_t *, uint8_t *, size_t);
+int hbuf_putc(hbuf_t *, char);
+int hbuf_puts(hbuf_t *, char *);
+void hbuf_lrm(hbuf_t *, size_t);
+void hbuf_rrm(hbuf_t *, size_t);
 
 #ifdef __cplusplus
 }

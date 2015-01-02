@@ -20,13 +20,13 @@
 
 #include <stdint.h>
 #include <stdlib.h>
-#include "buf.h"
+#include "hbuf.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#define SPP_BUF_UNIT 128  // .128kb
+#define SPP_HBUF_UNIT 128  // .128kb
 
 typedef enum {
     SPP_OK = 0,
@@ -36,7 +36,7 @@ typedef enum {
 } spp_st_t;
 
 typedef struct spp_st {
-    buf_t *buf;   /* feed buf */
+    hbuf_t *buf;   /* feed buf */
     void *priv;   /* user-settable arbitrary field */
     /* *
      * required handler, called with 4 arguments: spp itself,
