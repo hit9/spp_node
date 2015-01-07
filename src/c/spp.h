@@ -33,7 +33,7 @@ typedef enum {
     SPP_ENOMEM = -1,
     SPP_EBADFMT = -2,
     SPP_EUNFINISH = -3,
-} spp_st_t;
+} spp_error_t;
 
 typedef struct spp_st {
     hbuf_t *buf;   /* feed buf */
