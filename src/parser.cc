@@ -21,6 +21,8 @@ Parser::Parser()
 }
 
 Parser::~Parser() {
+    if (!handle.IsEmpty())
+        NanDisposePersistent(handle);
     spp_free(parser);
 }
 
@@ -94,7 +96,6 @@ NAN_METHOD(Parser::Get) {
         Local<Value> retv;
         Parser *p = ObjectWrap::Unwrap<Parser>(args.This());
         Local<Array> arr(NanNew<Array>());
-        NanDisposePersistent(p->handle);
         NanAssignPersistent(p->handle, arr);
         int result = spp_parse(p->parser);
 
