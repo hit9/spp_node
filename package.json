@@ -8,11 +8,15 @@
   },
   "dependencies": {
     "bindings": "*",
-    "nan": "~1.1.2"
+    "nan": "~1.6.2"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/hit9/spp_node.git"
+  },
+  "engines": {
+    "iojs": ">= 1.0.4",
+    "node": ">= 0.10.30"
   },
   "licenses": "MIT"
 }
