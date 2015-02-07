@@ -4,6 +4,12 @@ Simple Protocol Parser
 *Actually, this is [ssdb](http://ssdb.io)'s network protocol, and I think it can
 be used on other projects.*
 
+Support Engins
+--------------
+
+- nodejs (>=v0.10.30)
+- iojs (>=v1.0.4)
+
 Protocol
 --------
 
