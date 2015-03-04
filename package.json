@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "bindings": "*",
-    "nan": "~1.6.2"
+    "nan": "~1.7.0"
   },
   "repository": {
     "type": "git",
