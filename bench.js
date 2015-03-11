@@ -51,7 +51,7 @@ NodejsParser.prototype.get = function() {
 
     var dis = ch - ptr;
 
-    if (dis === 1 || (dis === 2 && ptr[0] === 13)) {
+    if (dis === 1 || (dis === 2 && this.buf[ptr] === 13)) {
       this.buf = this.buf.slice(ch);
       return chunk;  // OK
     }
