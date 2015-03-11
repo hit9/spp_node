@@ -4,6 +4,10 @@ Simple Protocol Parser
 *Actually, this is [ssdb](http://ssdb.io)'s network protocol, and I think it can
 be used on other projects.*
 
+- Lua Port: https://github.com/hit9/spp_lua
+- Python Port: https://github.com/hit9/spp_py
+
+
 Support Engines
 --------------
 
