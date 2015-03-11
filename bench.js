@@ -56,7 +56,7 @@ NodejsParser.prototype.get = function() {
       return chunk;  // OK
     }
 
-    var sz = parseInt(this.buf.slice(ptr), 10);
+    var sz = parseInt(this.buf.slice(ptr, ch), 10);
 
     len -= dis + sz;
     ptr += dis + sz;
