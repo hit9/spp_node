@@ -74,12 +74,10 @@ API Ref
 Benchmark
 ---------
 
-Simple Benchmark Result shows that: **SPP is 10 times faster than nodejs implementation**
-
 ```
 $ node bench.js
-spp parser:     116279 ops
-nodejs parser:  9920 ops
+spp parser:     147058 ops
+nodejs parser:  120481 ops
 ```
 
 License
