@@ -76,8 +76,8 @@ Benchmark
 
 ```
 $ node bench.js
-spp parser:     147058 ops
-nodejs parser:  120481 ops
+spp parser: 500000 in 4.127s => 121153 ops
+nodejs parser: 500000 in 6.143s => 81393 ops
 ```
 
 License

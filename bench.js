@@ -3,23 +3,22 @@ var assert = require('assert');
 var spp = require('./build/Release/spp');
 var parser = new spp.Parser();
 
-var n = 10000;
+var n = 500000;
 
 /********************  SPP  **************************/
+
+var startAt = new Date();
 
 for (var i = 0; i < n; i++) {
   var istr = i.toString();
   var ilen = Buffer.byteLength(istr);
   parser.feed(util.format('2\nok\n%d\n%s\n\n', ilen, istr));
-}
-
-var startAt = new Date();
-for (var i = 0; i < n; i++) {
   assert.deepEqual(parser.get(), ['ok', i]);
 }
+
 var endAt = new Date();
 var ops = (n * 1000) / (endAt - startAt);
-console.log(util.format('spp parser:\t%d ops',  parseInt(ops)));
+console.log(util.format('spp parser: %d in %ss => %d ops', n, (endAt - startAt)/1000, parseInt(ops)));
 
 
 /******************** Nodejs Implementation *************************/
@@ -79,16 +78,15 @@ NodejsParser.prototype.get = function() {
 
 var nodejsParser = new NodejsParser();
 
+var startAt = new Date();
+
 for (var i = 0; i < n; i++) {
   var istr = i.toString();
   var ilen = Buffer.byteLength(istr);
   nodejsParser.feed(util.format('2\nok\n%d\n%s\n\n', ilen, istr));
-}
-
-var startAt = new Date();
-for (var i = 0; i < n; i++) {
   assert.deepEqual(nodejsParser.get(), ['ok', i]);
 }
+
 var endAt = new Date();
 var ops = (n * 1000) / (endAt - startAt);
-console.log(util.format('nodejs parser:\t%d ops',  parseInt(ops)));
+console.log(util.format('nodejs parser: %d in %ss => %d ops', n, (endAt - startAt)/1000, parseInt(ops)));
