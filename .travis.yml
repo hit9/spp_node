@@ -11,6 +11,7 @@ node_js:
   - "iojs-v1.7.1"
   - "iojs-v1.8.1"
   - "iojs-v2.0.0"
+  - "iojs"
 
 script:
   - npm test
