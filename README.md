@@ -7,6 +7,8 @@ be used on other projects.*
 - Lua Port: https://github.com/hit9/spp_lua
 - Python Port: https://github.com/hit9/spp_py
 
+[![Build Status](https://travis-ci.org/hit9/spp_node.svg)](https://travis-ci.org/hit9/spp_node)
+
 
 Support Engines
 --------------
