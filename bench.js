@@ -3,7 +3,7 @@ var assert = require('assert');
 var spp = require('./build/Release/spp');
 var parser = new spp.Parser();
 
-var n = 500000;
+var n = 100000;
 
 /********************  SPP  **************************/
 
