@@ -3,12 +3,9 @@
   "description": "My Simple Protocol Parser For Node, Built For Speed.",
   "version": "0.1.0",
   "author": "hit9 <hit9@icloud.com>",
-  "engines": {
-    "node": ">= 0.8.0"
-  },
   "dependencies": {
     "bindings": "*",
-    "nan": "~1.7.0"
+    "nan": "~1.8.4"
   },
   "repository": {
     "type": "git",
@@ -17,6 +14,9 @@
   "engines": {
     "iojs": ">= 1.0.4",
     "node": ">= 0.10.30"
+  },
+  "scripts": {
+    "test": "node test.js"
   },
   "licenses": "MIT"
 }
